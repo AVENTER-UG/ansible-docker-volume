@@ -1,0 +1,11 @@
+- name: "Gather all hosts information"
+  gather_facts: yes
+  hosts: all
+     
+- name: "Install Docker Volume RBD"
+  hosts: worker
+  roles:
+    - role: rbd
+      tags:
+        - rbd
+

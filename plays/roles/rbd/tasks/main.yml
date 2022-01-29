@@ -1,0 +1,32 @@
+---
+
+- name: copy rbd systemd scripts into place
+  copy: src={{ item }} dest=/etc/systemd/system mode=0755
+  with_items:
+    - docker-volume-rbd.service
+
+- name: create config dir for docker-volume
+  file:
+    path: /etc/docker-volume
+    state: directory
+
+- name: copy docker-volume binary
+  copy:
+    src: centos7/docker-volume-rbd
+    dest: /usr/bin/docker-volume-rbd
+    mode: 0755
+
+- name: copy rbd env
+  template: src=rbd.env.j2 dest=/etc/docker-volume/rbd.env mode=0644
+
+- name: reload systemd
+  command: systemctl daemon-reload
+  
+- name: start rbd
+  service:
+    name: "docker-volume-rbd"
+    enabled: yes
+    state: started
+  ignore_errors: true    
+  
+
