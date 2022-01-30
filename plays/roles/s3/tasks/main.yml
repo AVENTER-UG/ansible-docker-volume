@@ -1,0 +1,35 @@
+---
+
+- name: copy s3 systemd scripts into place
+  copy: src={{ item }} dest=/etc/systemd/system mode=0755
+  with_items:
+    - docker-volume-s3.service
+
+- name: create config dir for docker-volume
+  file:
+    path: /etc/docker-volume
+    state: directory
+
+- name: copy s3 docker-volume binary
+  copy:
+    src: centos7/docker-volume-s3
+    dest: /usr/bin/docker-volume-s3
+    mode: 0750
+
+- name: copy s3 env
+  template: 
+    src: s3.env.j2 
+    dest: /etc/docker-volume/s3.env 
+    mode: 0600
+
+- name: reload systemd
+  command: systemctl daemon-reload
+  
+- name: start s3
+  service:
+    name: "docker-volume-s3"
+    enabled: yes
+    state: restarted
+  ignore_errors: true    
+  
+

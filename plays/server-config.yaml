@@ -2,10 +2,13 @@
   gather_facts: yes
   hosts: all
      
-- name: "Install Docker Volume RBD"
+- name: "Install Docker Volume Services"
   hosts: worker
   roles:
     - role: rbd
       tags:
         - rbd
+    - role: s3
+      tags:
+        - s3
 

@@ -8,3 +8,9 @@ This ansible playbook will roleout our docker-volume services.
     ansible-playbook -i ../inventory/mesos plays/server-config.yaml --tags rbd
 ```
 
+## Install S3
+
+```bash
+    ansible-playbook -i ../inventory/mesos plays/server-config.yaml --tags s3
+```
+
